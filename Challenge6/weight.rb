@@ -24,6 +24,6 @@ puts "You now have #{$grain_side} pounds of grain on the scale."
 
 arrayBalance = balance.calculate($grain_side, $non_grain_side)
 
-puts arrayBalance[:grain]     #an array in a hash
-puts arrayBalance[:non_grain] #an array in a hash
+puts "We added #{arrayBalance[:grain]} to the grain side"     #an array in a hash
+puts "We added #{arrayBalance[:non_grain]} to the non-grain side" #an array in a hash
 

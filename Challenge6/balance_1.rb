@@ -17,57 +17,14 @@ class Balance
            #do nothing
     end
 
+    def addToNonGrain(weightToAdd,non_grain_side)
+
+    end
+
     def addToGrainSide(weightToAdd,grain_side)
       grain_side = grain_side +  weightToAdd
       return grain_side
     end
-
-    def addTwoDigitsFromArray(arrayWeight,targetWeight)
-      #Add all 2 digits combos until sum = targetWeight
-      #return array of values used
-      #use array.combination to get the combinations
-      #use array.inject to add them up
-      #skip over the combination where the two numbers are equal
-      puts "now in addTwoDigitsFromArray "
-      sum = 0
-      arrayCombo = Array.new
-      arrayCombo = arrayWeight.combination(2).to_a
-      arraySum = Array.new
-      #puts arrayCombo[0]
-      i=0
-      @total = 0
-      puts "Target Weight: #{targetWeight}"
-
-      begin
-        arrayLength = arrayCombo.length
-        puts arrayLength
-        arrayCombo[i].each_slice(1) do |x,y|
-          @total = arrayCombo[0].inject(:+)
-        puts "Total = #{@total}"
-          if @total == targetWeight
-            exit
-          end
-          i = i + 1
-          puts "i = #{i}"
-        end
-      end
-
-
-
-      puts "leaving addTwoDigitsFromArray"
-
-    end
-
-    def addThreeDigitsFromArray(arrayWeight,targetWeight)
-      #Add all 3 digits combos until sum = targetWeight
-    end
-
-    def addFourDigitsFromArray(arrayWeight,targetWeight)
-      #Add all 4 digits combos until sum = targetWeight
-      #return array of values used
-
-    end
-
 
     def calculate(grain_side, non_grain_side)
       #this is the algorithm to determine which weights go on which sides of the balance
@@ -75,25 +32,10 @@ class Balance
 
       arrayGrain = Array.new
       arrayNonGrain = Array.new
-      arrayWeights = Array.new
-      arrayWeights = [ROCK1,ROCK3,ROCK9,ROCK27]
-      targetWeight = grain_side
 
-      puts "Target Weight: #{targetWeight}"
-
-      #First, let's add all four values in the array and see if that gets us our answer
-      sum = arrayWeights.inject{|sum,x| sum + x}
-      #puts sum
-      if grain_side == sum
-        arrayNonGrain << arrayWeights #return all weights
-        non_grain_side += sum
-        difference = grain_side - non_grain_side
-      end
 
       begin
-      if difference != 0
-        #skip this if difference ==0
-         #Next, let's get the easy ones out of the way
+         #First, let's get the easy ones out of the way
         if grain_side - ROCK27 == 0
           arrayNonGrain << ROCK27 #we used 27 already
           non_grain_side += ROCK27
@@ -110,23 +52,12 @@ class Balance
             arrayNonGrain << ROCK1 #we used 1 already
             non_grain_side += ROCK1
             difference = grain_side - non_grain_side
-          end
-      end
-
-      begin
-        if difference != 0
-          #Next, lets' get all of the ones that do not require weights added to both sides
-          sumTwoDigits = addTwoDigitsFromArray(arrayWeights,targetWeight)
-          puts sumTwoDigits
         end
 
 
-      end
 
 
-
-
-      if difference != 0      #skip this if difference == 0
+      if difference != 0
         if grain_side - ROCK27 > 0
           arrayNonGrain << ROCK27 #we used 27 already
           non_grain_side += ROCK27
@@ -153,8 +84,8 @@ class Balance
                     arrayNonGrain << ROCK1 #we used 1 already
                     non_grain_side += ROCK1
                     difference = grain_side - non_grain_side
-                end
-            end
+                  end
+              end
             if difference - ROCK1 == 0
               arrayNonGrain << ROCK1 #we used 1 already
               non_grain_side += ROCK1
@@ -163,7 +94,7 @@ class Balance
           end
         end
       end
-    end until difference == 0
+      end until difference == 0
 
 
 
