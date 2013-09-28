@@ -27,47 +27,46 @@ class Balance
       #return array of values used
       #use array.combination to get the combinations
       #use array.inject to add them up
-      #skip over the combination where the two numbers are equal
-      puts "now in addTwoDigitsFromArray "
       sum = 0
-      arrayCombo = Array.new
-      arrayCombo = arrayWeight.combination(2).to_a
-      arraySum = Array.new
-      #puts arrayCombo[0]
-      i=0
-      @total = 0
-      puts "Target Weight: #{targetWeight}"
-
+      @arrayCombo = Array.new
+      @arrayCombo = arrayWeight.combination(2).to_a
       begin
-        arrayLength = arrayCombo.length
-        puts arrayLength
-        arrayCombo[i].each_slice(1) do |x,y|
-          @total = arrayCombo[0].inject(:+)
-        puts "Total = #{@total}"
+        @arrayLength = @arrayCombo.length
+        i = 0
+        @arrayCombo[i].each_slice(1) do |x,y|
+          @total = @arrayCombo[i].inject(:+)
+          @returnCombo = @arrayCombo[i]
           if @total == targetWeight
-            exit
+            return @returnCombo
           end
           i = i + 1
-          puts "i = #{i}"
-        end
+        end until i == @arrayLength
+        return targetWeight
       end
-
-
-
-      puts "leaving addTwoDigitsFromArray"
-
     end
 
     def addThreeDigitsFromArray(arrayWeight,targetWeight)
       #Add all 3 digits combos until sum = targetWeight
-    end
-
-    def addFourDigitsFromArray(arrayWeight,targetWeight)
-      #Add all 4 digits combos until sum = targetWeight
       #return array of values used
-
+      #use array.combination to get the combinations
+      #use array.inject to add them up
+      sum = 0
+      @arrayCombo = Array.new
+      @arrayCombo = arrayWeight.combination(3).to_a
+      begin
+        @arrayLength = @arrayCombo.length
+        i = 0
+        @arrayCombo[i].each_slice(1) do |x,y,z|
+          @total = @arrayCombo[i].inject(:+)
+          @returnCombo = @arrayCombo[i]
+          if @total == targetWeight
+            return @returnCombo
+          end
+          i = i + 1
+        end until i == @arrayLength
+        return targetWeight
+      end
     end
-
 
     def calculate(grain_side, non_grain_side)
       #this is the algorithm to determine which weights go on which sides of the balance
@@ -91,8 +90,10 @@ class Balance
       end
 
       begin
-      if difference != 0
+      if difference == 0
+        #do nothing
         #skip this if difference ==0
+        else
          #Next, let's get the easy ones out of the way
         if grain_side - ROCK27 == 0
           arrayNonGrain << ROCK27 #we used 27 already
@@ -113,14 +114,32 @@ class Balance
           end
       end
 
-      begin
+      begin   #test adding two rocks
         if difference != 0
           #Next, lets' get all of the ones that do not require weights added to both sides
           sumTwoDigits = addTwoDigitsFromArray(arrayWeights,targetWeight)
-          puts sumTwoDigits
+          #puts sumTwoDigits
+          classType = sumTwoDigits.class.to_s
+          if classType == "Array"
+            non_grain_side = sumTwoDigits.inject{|sum,x| sum + x}
+            difference = grain_side - non_grain_side
+            arrayNonGrain << sumTwoDigits
+          end
         end
+      end
 
-
+      begin  #test adding 3 rocks
+        if difference != 0
+          #Next, lets' get all of the ones that do not require weights added to both sides
+          sumThreeDigits = addThreeDigitsFromArray(arrayWeights,targetWeight)
+          #puts sumThreeDigits
+          classType = sumThreeDigits.class.to_s
+          if classType == "Array"
+            non_grain_side = sumThreeDigits.inject{|sum,x| sum + x}
+            difference = grain_side - non_grain_side
+            arrayNonGrain << sumThreeDigits
+          end
+        end
       end
 
 
