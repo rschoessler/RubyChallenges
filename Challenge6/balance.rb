@@ -82,14 +82,13 @@ class Balance
 
       #First, let's add all four values in the array and see if that gets us our answer
       sum = arrayWeights.inject{|sum,x| sum + x}
-      #puts sum
       if grain_side == sum
         arrayNonGrain << arrayWeights #return all weights
         non_grain_side += sum
         difference = grain_side - non_grain_side
       end
 
-      begin
+  begin  #Next let's see if any values = only one rock
       if difference == 0
         #do nothing
         #skip this if difference ==0
@@ -111,14 +110,13 @@ class Balance
             arrayNonGrain << ROCK1 #we used 1 already
             non_grain_side += ROCK1
             difference = grain_side - non_grain_side
-          end
+        end
       end
 
-      begin   #test adding two rocks
+       #test adding two rocks
         if difference != 0
           #Next, lets' get all of the ones that do not require weights added to both sides
           sumTwoDigits = addTwoDigitsFromArray(arrayWeights,targetWeight)
-          #puts sumTwoDigits
           classType = sumTwoDigits.class.to_s
           if classType == "Array"
             non_grain_side = sumTwoDigits.inject{|sum,x| sum + x}
@@ -126,13 +124,11 @@ class Balance
             arrayNonGrain << sumTwoDigits
           end
         end
-      end
 
-      begin  #test adding 3 rocks
+        #test adding 3 rocks
         if difference != 0
           #Next, lets' get all of the ones that do not require weights added to both sides
           sumThreeDigits = addThreeDigitsFromArray(arrayWeights,targetWeight)
-          #puts sumThreeDigits
           classType = sumThreeDigits.class.to_s
           if classType == "Array"
             non_grain_side = sumThreeDigits.inject{|sum,x| sum + x}
@@ -140,10 +136,6 @@ class Balance
             arrayNonGrain << sumThreeDigits
           end
         end
-      end
-
-
-
 
       if difference != 0      #skip this if difference == 0
         if grain_side - ROCK27 > 0
@@ -184,20 +176,11 @@ class Balance
       end
     end until difference == 0
 
+    puts "Difference:  #{difference}"
 
+    return {:grain => arrayGrain, :non_grain => arrayNonGrain}
 
-
-
-        #puts "Non-grain side:  #{non_grain_side}"
-        #puts "Grain side:  #{grain_side}"
-        puts "Difference:  #{difference}"
-
-        #arrayGrain << grain_side
-        #arrayNonGrain << non_grain_side
-
-      return {:grain => arrayGrain, :non_grain => arrayNonGrain}
-
-    end
+  end
 
 
 
